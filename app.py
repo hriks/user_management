@@ -97,12 +97,18 @@ def login():
         value = flask_login_auth.authenticate(username, password)
         if (value == 1):
             role = flask_login_auth.role_authenticate(username, password)
-            session['name'] = username
-            session['role'] = role
-            print "Session role is ", session['role']
-            messages = models.message_show()
-            return render_template('pages/placeholder.home.html',
-                                   session=session, messages=messages)
+            blocked = flask_login_auth.blocked(username, password)
+            if not blocked:
+                session['name'] = username
+                session['role'] = role
+                messages = models.message_show()
+                return render_template('pages/placeholder.home.html',
+                                       session=session, messages=messages)
+            else:
+                error = 'Your Account is blocked !\
+                Please contact Admin'
+                return render_template(
+                    'forms/login.html', form=form, error=error)
         else:
             error = 'Invalid username or password \
             Please try again!'
@@ -132,9 +138,8 @@ def index():
 @login_requied
 def message():
     if request.method == 'POST':
-        message = models.post_messages(
+        models.post_messages(
             session['name'], request.form['message'])
-        print message
         return redirect(url_for('home'))
 
 
@@ -142,10 +147,8 @@ def message():
 @login_requied
 def delete():
     if request.method == 'POST':
-        print request.form['submit']
-        id = models.message_delete(
+        models.message_delete(
             request.form['submit'])
-        print id, "DELETED"
         return redirect(url_for('home'))
 
 
@@ -153,10 +156,8 @@ def delete():
 @login_requied
 def block():
     if request.method == 'POST':
-        print request.form['submit']
-        block = models.block(
+        models.block(
             request.form['submit'], request.form['userid'])
-        print block, "DELETED"
         return redirect(url_for('users'))
 
 
@@ -171,7 +172,10 @@ def edit():
 @app.route('/update', methods=['GET', 'POST'])
 @login_requied
 def update():
-    userid = session['editid']
+    if session['editid']:
+        userid = session['editid']
+    else:
+        userid = session['name']
     form = UpdateForm(request.form)
     if request.method == 'POST':
         user = models.update(

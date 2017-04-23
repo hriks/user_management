@@ -17,7 +17,7 @@ def get_connection():
             port=5432)
         return conn
     except Exception as e:
-        raise e
+        return e
 
 # for authenticating ---------------------------------------------------
 # Try except block is used for passing errors
@@ -31,9 +31,6 @@ def authenticate(username, password):
         query = query % (username, password)
         cursor.execute(query)
         rows = cursor.fetchall()
-        print username
-        print password
-        print rows[0][2]
         try:
             if (rows[0][0] == username) and (rows[0][1] == password):
                 connection.close()
@@ -43,8 +40,8 @@ def authenticate(username, password):
                 return 0
         except Exception as error:
             return error
-    except Exception as e:
-        raise e
+    except Exception as error:
+        return error
 # -------------------------------------------------------------------------
 
 
@@ -55,26 +52,7 @@ def role_authenticate(username, password):
     query = query % (username, password)
     cursor.execute(query)
     rows = cursor.fetchall()
-    print rows[0][2]
     return rows[0][2]
-
-
-# User data ---------------------------------------------------------------
-
-
-def get_data(username, password):
-    try:
-        connection = get_connection()
-        cursor = connection.cursor()
-        query = """SELECT * from "public"."user_rec" where username='%s'\
-        and password='%s'"""
-        query = query % (username, password)
-        cursor.execute(query)
-        rows = cursor.fetchall()
-        connection.close()
-        return rows
-    except Exception as e:
-        raise e
 
 # -------------------------------------------------------------------------
 # Search Box --------------------------------------------------------------
@@ -93,3 +71,12 @@ def get_data(username, password):
 #         return rows
 #     except Exception as e:
 #         raise e
+
+def blocked(username, password):
+    connection = get_connection()
+    cursor = connection.cursor()
+    query = """SELECT userid, password, block from "public"."user_rec" where userid='%s' and password='%s'"""  # noqa
+    query = query % (username, password)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    return rows[0][2]

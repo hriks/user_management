@@ -8,7 +8,7 @@ Update
 
     <h3 class="form-heading">Update <a href="{{ url_for('users') }}" title="Back to Users"><i class="fa fa-home pull-right"></i></a></h3>
 
-    Profile Update for Username : <b>{{ userid }}</b>
+    Profile Update for User : <b>{{ userid }}</b>
     <input name = userid type="hidden" value="{{ userid }}">
 
     {{ form.role(class_ = 'form-control first-input', placeholder = form.role.label.text, required = true, autofocus = False) }}
