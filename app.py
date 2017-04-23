@@ -37,29 +37,27 @@ def logout_requied(f):
             return f(*args, **kwargs)
     return wrap
 
-
-def forget_step1(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'step1' in session:
-            return f(*args, **kwargs)
-        else:
-            flash(' Sorry! You Need to Verify Email First')
-            return redirect(url_for('login'))
-    return wrap
-
-
-def forget_step2(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'step2' in session:
-            return f(*args, **kwargs)
-        else:
-            flash(' Sorry! You Need to Verify Email First')
-            return redirect(url_for('login'))
-    return wrap
-
 # Controllers.
+
+
+@app.route('/register', methods=['GET', 'POST'])
+@login_requied
+def register():
+    form = RegisterForm(request.form)
+    if request.method == 'POST':
+        user = models.create_user(
+            form.userid.data, form.name.data, form.role.data, form.email.data, form.password.data
+        )
+        print form.userid.data, form.name.data, form.role.data, form.email.data, form.password.data
+        if user == 1:
+            flash(
+                'ERROR! PLEASE ENTER SOMETHING OR CHECK YOUR\
+                USER EXITS OR ALREADY EXITS'
+            )
+            return redirect(url_for('register'))
+        else:
+            return redirect(url_for('home'))
+    return render_template('forms/register.html', form=form)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -100,21 +98,6 @@ def login():
     return render_template('forms/login.html', form=form)
 
 
-@app.route('/create', methods=['GET', 'POST'])
-@login_requied
-def create():
-    form = CreateProject(request.form)
-    if request.method == 'POST':
-        project = Projects(session['usersid'],
-                           form.name.data, form.short_desc.data,
-                           form.long_desc.data, form.goal_amount.
-                           data, form.time_end.data)
-        db.session.add(project)
-        db.session.commit()
-        return redirect(url_for('index'))
-    return render_template('pages/placeholder.create.html', form=form)
-
-
 @app.route('/search', methods=['GET', 'POST'])
 @login_requied
 def search():
@@ -140,68 +123,6 @@ def messages():
         projectId = request.form['submit']
         session['projectId'] = projectId
         return redirect(url_for('newPledge'))
-
-
-@app.route('/newPledge', methods=['GET', 'POST'])
-@login_requied
-def newPledge():
-    form = NewPledge(request.form)
-    if request.method == 'POST':
-        pledge = Pledges(session['projectId'],
-                         session['usersid'], form.amount.data)
-        db.session.add(pledge)
-        db.session.commit()
-        return redirect(url_for('home'))
-    return render_template('pages/placeholder.pledge.html', form=form,
-                           session=session)
-
-
-@app.route('/register', methods=['GET', 'POST'])
-@logout_requied
-def register():
-    session.clear()
-    form = RegisterForm(request.form)
-    if request.method == 'POST':
-        user = User(form.name.data, form.email.data,
-                    form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('login'))
-    return render_template('forms/register.html', form=form)
-
-
-@app.route('/forgot', methods=['GET', 'POST'])
-@logout_requied
-def forgot():
-    session.clear()
-    form = ForgotForm(request.form)
-    if request.method == 'POST':
-        email = form.email.data
-        step1 = flask_login_auth.verify_email(email)
-        if step1 == 1:
-            session['step1'] = email
-            return redirect(url_for('verification_step2'))
-    return render_template('forms/forgot.html', form=form)
-
-
-@app.route('/verification_step2', methods=['GET', 'POST'])
-@forget_step1
-def verification_step2():
-    form = ForgotForm2(request.form)
-    if request.method == 'POST':
-        username = form.username.data
-        password = flask_login_auth.verify_user(username)
-        session['step2'] = username
-        session['step2'] = password
-        print password
-        return redirect(url_for('get_data'))
-    return render_template('forms/forgot_2.html', form=form, session=session)
-
-
-@app.route('/get_data', methods=['GET', 'POST'])
-@forget_step1
-def get_data():
-    return render_template('pages/placeholder.forget.html', session=session)
 
 # Error handlers.
 

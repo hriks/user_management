@@ -44,14 +44,14 @@ def post_messages(USER, MESSAGES):
     connection.close()
 
 
-def create_user(USER, NAME, ROLE, EMAIL, PASSWORD):
+def process_create_user(USER, NAME, ROLE, EMAIL, PASSWORD):
     BLOCK = False
     connection = get_connection()
     cursor = connection.cursor()
     print "cur is created"
     query = """INSERT INTO user_rec(
-    USER,NAME,ROLE,BLOCK,PASSWORD,EMAIL
-    ) VALUES('%s', '%s', '%s', '%s', '%s');"""
+    USERID,NAME,ROLE,BLOCK,PASSWORD,EMAIL
+    ) VALUES('%s', '%s', '%s', '%s', '%s', '%s');"""
     query = query % (
         USER, NAME, ROLE, BLOCK, EMAIL, PASSWORD)
     print query
@@ -61,19 +61,20 @@ def create_user(USER, NAME, ROLE, EMAIL, PASSWORD):
     connection.close()
 
 
-def user_alreadyexits(USER, NAME, ROLE, EMAIL, PASSWORD):
-    BLOCK = False
+def create_user(USER, NAME, ROLE, EMAIL, PASSWORD):
     connection = get_connection()
     cursor = connection.cursor()
-    query = """SELECT USERID from  where USERID='%s';"""
+    query = """SELECT userid from user_rec where USERID='%s';"""
     query = query % (USER, )
     cursor.execute(query)
     rows = cursor.fetchall()
-    print rows
+    print len(rows)
     try:
-        if (len(rows) == 0):
-            create_user(USER, NAME, ROLE, BLOCK, EMAIL, PASSWORD)
+        if len(rows) == 0:
+            process_create_user(USER, NAME, ROLE, EMAIL, PASSWORD)
+            print "processed"
         else:
+            print "FAILED"
             return 1
     except Exception as error:
         return error
