@@ -31,7 +31,8 @@ def logout_requied(f):
     @wraps(f)
     def wrap(*args, **kwargs):
         if 'name' in session:
-            flash(' Sorry! You are logged in Already. Logout to Do your Action')
+            flash(
+                ' Sorry! You are logged in Already. Logout to Do your Action')
             return redirect(url_for('home'))
         else:
             return f(*args, **kwargs)
@@ -46,9 +47,9 @@ def register():
     form = RegisterForm(request.form)
     if request.method == 'POST':
         user = models.create_user(
-            form.userid.data, form.name.data, form.role.data, form.email.data, form.password.data
+            form.userid.data, form.name.data, form.role.data,
+            form.email.data, form.password.data
         )
-        print form.userid.data, form.name.data, form.role.data, form.email.data, form.password.data
         if user == 1:
             flash(
                 'ERROR! PLEASE ENTER SOMETHING OR CHECK YOUR\
@@ -62,12 +63,19 @@ def register():
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('pages/placeholder.home.html')
+    messages = models.message_show()
+    return render_template('pages/placeholder.home.html', messages=messages)
 
 
 @app.route('/about')
 def about():
     return render_template('pages/placeholder.about.html')
+
+
+@app.route('/users')
+def users():
+    users = models.users()
+    return render_template('pages/placeholder.users.html', users=users)
 
 
 @app.route('/logout')
@@ -88,9 +96,13 @@ def login():
         password = form.password.data
         value = flask_login_auth.authenticate(username, password)
         if (value == 1):
+            role = flask_login_auth.role_authenticate(username, password)
             session['name'] = username
+            session['role'] = role
+            print "Session role is ", session['role']
+            messages = models.message_show()
             return render_template('pages/placeholder.home.html',
-                                   session=session)
+                                   session=session, messages=messages)
         else:
             error = 'Invalid username or password \
             Please try again!'
@@ -116,13 +128,37 @@ def index():
     return render_template('pages/placeholder.home.html', session=session)
 
 
-@app.route('/messages', methods=['GET', 'POST'])
+@app.route('/message', methods=['GET', 'POST'])
 @login_requied
-def messages():
+def message():
     if request.method == 'POST':
-        projectId = request.form['submit']
-        session['projectId'] = projectId
-        return redirect(url_for('newPledge'))
+        message = models.post_messages(
+            session['name'], request.form['message'])
+        print message
+        return redirect(url_for('home'))
+
+
+@app.route('/delete', methods=['GET', 'POST'])
+@login_requied
+def delete():
+    if request.method == 'POST':
+        print request.form['submit']
+        id = models.message_delete(
+            request.form['submit'])
+        print id, "DELETED"
+        return redirect(url_for('home'))
+
+
+@app.route('/block', methods=['GET', 'POST'])
+@login_requied
+def block():
+    if request.method == 'POST':
+        print request.form['submit']
+        block = models.block(
+            request.form['submit'], request.form['userid'])
+        print block, "DELETED"
+        return redirect(url_for('users'))
+
 
 # Error handlers.
 

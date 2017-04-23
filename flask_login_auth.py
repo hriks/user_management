@@ -27,12 +27,13 @@ def authenticate(username, password):
     try:
         connection = get_connection()
         cursor = connection.cursor()
-        query = """SELECT userid, password from "public"."user_rec" where userid='%s' and password='%s'"""
+        query = """SELECT userid, password, role from "public"."user_rec" where userid='%s' and password='%s'"""  # noqa
         query = query % (username, password)
         cursor.execute(query)
         rows = cursor.fetchall()
         print username
         print password
+        print rows[0][2]
         try:
             if (rows[0][0] == username) and (rows[0][1] == password):
                 connection.close()
@@ -45,6 +46,18 @@ def authenticate(username, password):
     except Exception as e:
         raise e
 # -------------------------------------------------------------------------
+
+
+def role_authenticate(username, password):
+    connection = get_connection()
+    cursor = connection.cursor()
+    query = """SELECT userid, password, role from "public"."user_rec" where userid='%s' and password='%s'"""  # noqa
+    query = query % (username, password)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    print rows[0][2]
+    return rows[0][2]
+
 
 # User data ---------------------------------------------------------------
 

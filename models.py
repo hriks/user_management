@@ -20,6 +20,7 @@ def create_db():
         cursor = connection.cursor()
         cursor.execute(
             '''CREATE TABLE rec (
+            ID  SERIAL PRIMARY KEY,
             USERID     TEXT   REFERENCES user_rec(USERID)  NOT Null,
             messages   TEXT
             );'''
@@ -34,7 +35,7 @@ def post_messages(USER, MESSAGES):
     connection = get_connection()
     cursor = connection.cursor()
     print "cur is created"
-    query = """INSERT INTO LOGSS(USERID,MESSAGES) VALUES('%s', '%s');"""
+    query = """INSERT INTO rec(USERID,MESSAGES) VALUES('%s', '%s');"""
     query = query % (
         USER, MESSAGES)
     print query
@@ -79,3 +80,49 @@ def create_user(USER, NAME, ROLE, EMAIL, PASSWORD):
     except Exception as error:
         return error
     connection.close()
+
+
+def message_show():
+    connection = get_connection()
+    cursor = connection.cursor()
+    query = """SELECT * from rec;"""
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    print rows, len(rows)
+    return rows
+    connection.close()
+
+
+def users():
+    connection = get_connection()
+    cursor = connection.cursor()
+    query = """SELECT userid, name, email, role, block from user_rec;"""
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    print rows, len(rows)
+    return rows
+    connection.close()
+
+
+def message_delete(id):
+    connection = get_connection()
+    cursor = connection.cursor()
+    query = """DELETE FROM rec WHERE ID = %s;"""
+    query = query % id
+    print query
+    cursor.execute(query)
+    connection.commit()
+    connection.close()
+    return "Deleted"
+
+
+def block(block, userid):
+    connection = get_connection()
+    cursor = connection.cursor()
+    query = """UPDATE user_rec SET block = '%s' WHERE userid = '%s';"""
+    query = query % (block, userid)
+    print query
+    cursor.execute(query)
+    connection.commit()
+    connection.close()
+    return "DONE"

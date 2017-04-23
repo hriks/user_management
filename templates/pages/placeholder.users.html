@@ -1,0 +1,95 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Users{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>User Management System</h1>
+</div>
+
+<p class="lead"> Users </p>
+
+<p>
+Edit profile
+<table border="5px" style="border-style:outset; border-width:2px; padding-left:4px; padding-right:4px; padding-top:1px; padding-bottom:1px" bgcolor="#33CCFF" width="921">
+    <tr style="text-align: center;font-size: 14px; background-color : #717D7E">
+    <td><font color="#000000" size="3"><strong>Role</strong></font></td>
+    <td><font color="#000000" size="3"><strong>User ID</strong></font></td>
+    <td><font color="#000000" size="3"><strong>Name</strong></font></td>
+    <td><font color="#000000" size="3"><strong>Email</strong></font></td>
+
+    {% if session['role'] == 'admin' or 'manager'%}
+
+    <td><font color="#000000" size="3"><strong>Update</strong></font></td>
+    <td><font color="#000000" size="3"><strong>Blocked</strong></font></td>
+
+    {% endif %}
+
+    </tr>
+    <font color="#000000">{% for user in users %}  
+    </font>  
+    <tr style="text-align: center;font-size: 10px;background-color : #E5DDDB;"><font color="#000000">
+    <td><b><font color="#000000" size="2">{{user[3]}}</font></b></td>
+    <td><b><font color="#000000" size="2">{{user[0]}}</font></b></td>
+    <td><b><font color="#000000" size="2">{{user[1]}}</font></b></td>
+    <td><b><font color="#000000" size="2">{{user[2]}}</font></b></td>
+
+    {% if session['role'] == 'admin' or 'manager' %}
+
+    {% if user[4] %}
+
+    <td>
+    	<font color="#000000" size="1">
+    		<strong>
+    			<a href="{{ url_for('edit') }}">
+    		</strong>
+    	</font>
+    </td>
+    <td>
+    	<b>
+    		<font color="white" size="1">
+    			<form action="block" method= POST>
+    		        <input name = userid type="hidden" value="{{ user[0] }}">
+	                <button name="submit" value="False" type="submit" style="width: 100%; background-color: green">
+	                Unblock
+	                </button>
+                </form>
+    		</font>
+    	</b>
+    </td>
+
+    {% else %}
+
+    <td>
+    	<b>
+    		<font color="white" size="1">
+                <form action="block" method= POST >
+                	<input name = userid type="hidden" value="{{ user[0] }}">
+	                <button name="submit" value="True" type="submit" style="width: 100%; background-color: red;">
+	                Block
+	                </button>
+                </form>
+    		</font>
+    	</b>
+    </td>
+
+    {% endif %}
+
+
+
+    {% endif %}
+
+    </tr>
+
+    {% endfor %}
+
+    </table>
+
+</p>
+
+<p class="lead">
+	<a href="{{ url_for('users') }}">
+		Create a new user
+	</a>
+</p>
+
+{% endblock %}
