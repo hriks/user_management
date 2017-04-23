@@ -55,7 +55,11 @@
             <li {% if request.endpoint == 'home' %} class="active" {% endif %}><a href="{{ url_for('home') }}">Home</a></li>
             <li {% if request.endpoint == 'about' %} class="active" {% endif %}><a href="{{ url_for('about') }}">About</a></li>
             {% if session['name'] %}
-            <li {% if request.endpoint == 'register' %} class="active" {% endif %}><a href="{{ url_for('register') }}">Create New User {% endif %}</a></li>
+            <li {% if request.endpoint == 'register' %} class="active" {% endif %}><a href="{{ url_for('register') }}">Create New User
+            </a></li>
+            <li {% if request.endpoint == 'users' %} class="active" {% endif %}><a href="{{ url_for('users') }}">
+            Users </a></li>
+             {% endif %}</a></li>
 
           </ul>
           <ul class="nav navbar-nav pull-right">{% if session['name'] %}

@@ -3,42 +3,43 @@
 {% block content %}
 
 <div class="page-header">
-  <h1>User-Management System</h1>
-</div>{% if session['usersid']%}
-<h1>PROJECTS </h1> 
-
-<div><form action="showPledge" method= POST >
-	<table border="1px" style="border-style:outset; border-width:1px; padding-left:4px; padding-right:4px; padding-top:7px; padding-bottom:7px" width="921" cell>
-    <thead>
-    <tr style="border-style:outset; border-width:1px; font-size: 24px;" >
-    <th>User ID</th>
-    <th>Project Id</th>
-    <th>Project Name</th>
-    <th>Short Description</th>
-    <th>Long Description</th>
-    <th>Pledge Amount</th>
-    <th>Pledge</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for n in session['project'] %}
- 		<tr style="font-size: 20px;">
-        <td><strong>{{n[1]}}</strong></td> 
- 			<td><strong>{{n[0]}}</strong></td> 
-    		<td><strong>{{n[2]}}</strong></td> 
-    		<td>{{n[3]}}</td>
-    		<td>{{n[4]}}</td>
-    		<td>{{n[5]}}</td>   
-    		<td><a><button name="submit" value="{{ n[0] }}" type="submit" style="width: 100%">Pledge</button></a></td>
-    	
- 		</tr>	
-{% endfor %}
-</tbody>
-    </table>
+  <h2>User-Management System</h2>
+</div>{% if session['role'] %}
+<div class="page-header">
+    <form action = "message" id="message" method = post>
+        <input id =message name="message" type = "text" placeholder = "Post your update here" style="height: 70px; width: 700px">
+        </br>
+        <input name ="Post update" type="submit" />
     </form>
+</div>
+<div class="page-header">
+    <h2> Latest Update </h2>
 
+    <table border="5px" style="border-style:outset; border-width:2px; padding-left:4px; padding-right:4px; padding-top:1px; padding-bottom:1px" bgcolor="#33CCFF" width="921">
+    {% for message in messages %}
+    <tr>
+        <td style="text-align: center;font-size: 14px; background-color : #717D7E" width="150">
+            <font color="white" size="3">
+                <strong>{{message[1]}} </strong>Says
+            </font>
+                {% if session['role'] == 'admin' %}
+                </br>
+                <form action="delete" method= POST >
+                <button name="submit" value="{{ message[0] }}" type="submit" style="width: 100%">Delete</button>
+                </form>
+                {% endif %}
+        </td>
+        <td style="text-align: center;font-size: 14px; background-color : #E5DDDB">
+            <font color="#000000" size="3">
+                <strong>{{message[2]}}</strong>
+            </font>
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
 
-
+    {{ message }}
+</div>
 {% elif not session['name']%}
 <p class="lead">Login to create new user, post your messages and share yours views</p>
 {% else %}

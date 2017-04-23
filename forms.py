@@ -37,3 +37,7 @@ class RegisterForm(Form):
 class LoginForm(Form):
     name = TextField('Username', [DataRequired()])
     password = PasswordField('Password', [DataRequired()])
+
+
+class PostMessage(Form):
+    message = TextField('Message', [DataRequired()])
