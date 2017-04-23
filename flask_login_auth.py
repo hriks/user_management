@@ -27,11 +27,12 @@ def authenticate(username, password):
     try:
         connection = get_connection()
         cursor = connection.cursor()
-        query = """SELECT username, password from "public"."user"\
-        where username='%s' and password='%s'"""
+        query = """SELECT userid, password from "public"."user_rec" where userid='%s' and password='%s'"""
         query = query % (username, password)
         cursor.execute(query)
         rows = cursor.fetchall()
+        print username
+        print password
         try:
             if (rows[0][0] == username) and (rows[0][1] == password):
                 connection.close()
@@ -52,7 +53,7 @@ def get_data(username, password):
     try:
         connection = get_connection()
         cursor = connection.cursor()
-        query = """SELECT * from "public"."user" where username='%s'\
+        query = """SELECT * from "public"."user_rec" where username='%s'\
         and password='%s'"""
         query = query % (username, password)
         cursor.execute(query)
@@ -66,16 +67,16 @@ def get_data(username, password):
 # Search Box --------------------------------------------------------------
 
 
-def searchbox(name):
-    try:
-        connection = get_connection()
-        cursor = connection.cursor()
-        query = """SELECT * from "public"."projects" where name='%s'"""
-        query = query % (name)
-        cursor.execute(query)
-        rows = cursor.fetchall()
-        print rows
-        connection.close()
-        return rows
-    except Exception as e:
-        raise e
+# def searchbox(name):
+#     try:
+#         connection = get_connection()
+#         cursor = connection.cursor()
+#         query = """SELECT * from "public"."projects" where name='%s'"""
+#         query = query % (name)
+#         cursor.execute(query)
+#         rows = cursor.fetchall()
+#         print rows
+#         connection.close()
+#         return rows
+#     except Exception as e:
+#         raise e
