@@ -126,3 +126,18 @@ def block(block, userid):
     connection.commit()
     connection.close()
     return "DONE"
+
+
+def update(role, userid, password, email, name):
+    connection = get_connection()
+    cursor = connection.cursor()
+    query = """UPDATE user_rec SET role = '%s', name = '%s', password = '%s', email = '%s' WHERE userid = '%s';""" # noqa
+    query = query % (role, name, password, email, userid)
+    print query
+    try:
+        cursor.execute(query)
+        connection.commit()
+        connection.close()
+        return 1
+    except Exception as error:
+        raise error

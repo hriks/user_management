@@ -1,0 +1,28 @@
+{% extends 'layouts/form.html' %}
+
+{% block title %}
+Update
+{% endblock %}
+{% block content %}
+  <form method="post" class="form">
+
+    <h3 class="form-heading">Update <a href="{{ url_for('users') }}" title="Back to Users"><i class="fa fa-home pull-right"></i></a></h3>
+
+    Profile Update for Username : <b>{{ userid }}</b>
+    <input name = userid type="hidden" value="{{ userid }}">
+
+    {{ form.role(class_ = 'form-control first-input', placeholder = form.role.label.text, required = true, autofocus = False) }}
+
+    {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
+
+    {{ form.email(class_ = 'form-control', placeholder = form.email.label.text, required = true) }}
+
+    {{ form.password(class_ = 'form-control', placeholder = form.password.label.text, required = true) }}
+
+    <p class="pull-left"><a href="{{ url_for('users') }}">Users</a></p>
+
+    <input type="submit" value="Update Profile" class="btn btn-primary btn-lg btn-block"  >
+
+  </form>
+
+{% endblock %}

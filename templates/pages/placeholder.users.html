@@ -35,22 +35,25 @@ Edit profile
 
     {% if session['role'] == 'admin' or 'manager' %}
 
-    {% if user[4] %}
-
     <td>
     	<font color="#000000" size="1">
-    		<strong>
-    			<a href="{{ url_for('edit') }}">
-    		</strong>
+    		<form action="edit" method= POST>
+	            <button name="submit" value="{{ user[0] }}" type="submit" style="width: 100%">
+	                Edit
+	            </button>
+            </form>
     	</font>
     </td>
+
+    {% if user[4] %}
+
     <td>
     	<b>
     		<font color="white" size="1">
     			<form action="block" method= POST>
     		        <input name = userid type="hidden" value="{{ user[0] }}">
-	                <button name="submit" value="False" type="submit" style="width: 100%; background-color: green">
-	                Unblock
+	            	<button name="submit" value="False" type="submit" style="width: 100%; background-color: green">
+	                	Unblock
 	                </button>
                 </form>
     		</font>

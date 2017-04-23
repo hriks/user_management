@@ -160,6 +160,38 @@ def block():
         return redirect(url_for('users'))
 
 
+@app.route('/edit', methods=['GET', 'POST'])
+@login_requied
+def edit():
+    if request.method == 'POST':
+        session['editid'] = request.form['submit']
+        return redirect(url_for('update'))
+
+
+@app.route('/update', methods=['GET', 'POST'])
+@login_requied
+def update():
+    userid = session['editid']
+    form = UpdateForm(request.form)
+    if request.method == 'POST':
+        user = models.update(
+            form.role.data, userid, form.password.data,
+            form.email.data, form.name.data
+        )
+        if user != 1:
+            flash(
+                'ERROR! Already on this role OR CHECK YOUR\
+                USERNAME OR ALREADY EXITS'
+            )
+            return redirect(url_for('update'))
+        else:
+            flash(
+                'Successfully Role changed for  %s to %s' % (
+                    userid, form.role.data)
+            )
+            session['editid'] = None
+            return redirect(url_for('users'))
+    return render_template('forms/update.html', form=form, userid=userid)
 # Error handlers.
 
 
