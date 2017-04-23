@@ -4,25 +4,39 @@
 Update
 {% endblock %}
 {% block content %}
+{% block custom_style %}
+    <style type="text/css">
+      .center {
+    margin: auto;
+    margin-top: 100px;
+    width: 60%;
+    height: 60%;
+    border: 1px solid #73AD21;
+    padding: 10px;
+}
+</style>
   <form method="post" class="form">
 
-    <h3 class="form-heading">Update <a href="{{ url_for('users') }}" title="Back to Users"><i class="fa fa-home pull-right"></i></a></h3>
-
-    Profile Update for User : <b>{{ userid }}</b>
+    <h3 class="form-heading">Update <a href="{{ url_for('users') }}" title="Back to Users">
+    <i class="fa fa-home pull-right"></i></a></h3>
+</br>
+    Update profile for User : <b>{{ userid }}</b>
+    <div class="center">
     <input name = userid type="hidden" value="{{ userid }}">
-
+    <b>
+Role:
     {{ form.role(class_ = 'form-control first-input', placeholder = form.role.label.text, required = true, autofocus = False) }}
-
+Full Name:
     {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
-
+Email:
     {{ form.email(class_ = 'form-control', placeholder = form.email.label.text, required = true) }}
-
+password:
     {{ form.password(class_ = 'form-control', placeholder = form.password.label.text, required = true) }}
 
     <p class="pull-left"><a href="{{ url_for('users') }}">Users</a></p>
-
+</b>
     <input type="submit" value="Update Profile" class="btn btn-primary btn-lg btn-block"  >
-
+</div>
   </form>
-
+{% endblock custom_style %}
 {% endblock %}

@@ -3,14 +3,27 @@
 {% block content %}
 
 <div class="page-header">
-  <h1>About Page</h1>
+  <h1>About Role/User management System</h1>
 </div>
 
-<p class="lead"> User Management System </p>
+<h2 class="lead page-header"> User Management System </h2>
+<h4 class="lead page-header">Following actions can be performed under this user management system</h4>
 <p>
- Admin has some special rights</p>
+a. Create a new user [Admin]</br>
+b. Update His own profile information [User]</br>
+c. Update any user’s profile information [Admin, Manager]</br>
+d. Post a message [User]</br>
+e. Delete Any message [Admin]</br>
+f. Delete Own message [Admin]</br>
+g. Block User [Manager, Admin]</br>
+h. View All users [User, Manager, Admin]</p></br>
 
-<p class="lead">create a user</p>
-<p>latter</p>
+{% if session['role'] == 'admin' %}
+<p class="lead">
+	<a href="{{ url_for('users') }}">
+		Create a new user
+	</a>
+</p>
+{% endif %}
 
 {% endblock %}

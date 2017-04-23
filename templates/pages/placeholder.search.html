@@ -1,54 +1,86 @@
 {% extends 'layouts/main.html' %}
 {% block content %}
-  
-<div style="text-align: center;">
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-You search for '<b> {{search}} </b>'</br>
+{% block custom_style %}
+    <style type="text/css">
+        .center {
+        margin: auto;
+        width: 60%;
+        height: 60%;
+        border: 1px solid #73AD21;
+        padding: 10px;
+    }
+    </style>
 
-We had found :
+    <div style="text-align: center;">
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        You search for '<b> {{search}} </b>'</br>
+
 {% if match %}
+{% for user in match %}  
+        We had found : <b>{{ user[0] }}</b>
 
-<table border="1px" style="border-style:outset; border-width:1px; padding-left:4px; padding-right:4px; padding-top:7px; padding-bottom:7px" width="921" cell>
-    <thead>
-    <tr style="border-style:outset; border-width:1px; font-size: 24px;" >
-    <th>Project Id</th>
-    <th>Project Name</th>
-    <th>Short Description</th>
-    <th>Long Description</th>
-    <th>Pledge Amount</th>
-    <th>Pledge</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for n in match %}
- 		<tr style="font-size: 20px;">
- 			<td><strong>{{n[0]}}</strong></td> 
-    		<td><strong>{{n[2]}}</strong></td> 
-    		<td>{{n[3]}}</td>
-    		<td>{{n[4]}}</td>
-    		<td>{{n[5]}}</td>   
-    		<td><a><button name="submit" value="{{ n[0] }}" type="submit" style="width: 100%">Pledge</button></a></td>
-    	
- 		</tr>	
-{% endfor %}
-</tbody>
-    </table>
-
-
-
+    </div>
+    <div class="center">
+        <b>
+            Username :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{user[0]}}
+            </br>
+            Role Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{user[2]}}
+            </br>
+            Email  : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ user[3]}}
+            </br>
+        </b>
+{% if (session['role'] == 'admin') or (session['role'] == 'manager') %}
+        <font color="#000000" size="1">
+            <form action="edit" method= POST>
+                <button name="submit" value="{{ user[0] }}" type="submit" style="width: 100%">
+                    Edit
+                </button>
+            </form>
+        </font>
+{% if user[4] %}
+        <b>
+            <font color="white" size="1">
+                <form action="block" method= POST>
+                    <input name = userid type="hidden" value="{{ user[0] }}">
+                    <button name="submit" value="False" type="submit" style="width: 100%; background-color: green">
+                        Unblock
+                    </button>
+                </form>
+            </font>
+        </b>
 {% else %}
-Sorry we found nothing !
+        <b>
+            <font color="white" size="1">
+                <form action="block" method= POST >
+                    <input name = userid type="hidden" value="{{ user[0] }}">
+                    <button name="submit" value="True" type="submit" style="width: 100%; background-color: red;">
+                        Block
+                    </button>
+                </form>
+            </font>
+        </b>
 
 {% endif %}
+{% elif user[3] %}
 
-
+        <button name="submit" type="submit" style="width: 100%; background-color: red;">
+            Account is Blocked
+        </button>
+{% else %}
+        <button name="submit" type="submit" style="width: 100%; background-color: green;color: white">
+            Account is Active
+        </button>
+{% endif %}
+{% endfor %}
+    </div>
+{% else %}
+Sorry we found nothing !
+{% endif %}
+{% endblock custom_style %}
 
 </div>
-
-
-
 
 {% endblock %}

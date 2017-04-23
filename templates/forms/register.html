@@ -1,29 +1,42 @@
 {% extends 'layouts/form.html' %}
 
 {% block title %}
-Register
+Add User
 {% endblock %}
 {% block content %}
+{% block custom_style %}
+    <style type="text/css">
+      .center {
+    margin: auto;
+    margin-top: 100px;
+    width: 60%;
+    height: 60%;
+    border: 1px solid #73AD21;
+    padding: 10px;
+}
+    </style>
   <form method="post" class="form">
 
-    <h3 class="form-heading">Register <a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h3>
+    <h3 class="form-heading">Add User <a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h3>
 
+    <div class="center">
+<b>Role:
     {{ form.role(class_ = 'form-control first-input', placeholder = form.role.label.text, required = true, autofocus = False) }}
-
+User id:
     {{ form.userid(class_ = 'form-control first-input', placeholder = form.userid.label.text, required = true, autofocus = true) }}
-
+Full Name:
     {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
-
+Email:
     {{ form.email(class_ = 'form-control', placeholder = form.email.label.text, required = true) }}
-
+Password:
     {{ form.password(class_ = 'form-control', placeholder = form.password.label.text, required = true) }}
-
+Confirm Password:
     {{ form.confirm(class_ = 'form-control last-input', placeholder = form.confirm.label.text, required = true) }}
-
-    <p class="pull-left"><a href="{{ url_for('login') }}">Login</a></p>
-
+</b>
     <input type="submit" value="Register" class="btn btn-primary btn-lg btn-block"  >
 
   </form>
+  </div>
+    {% endblock custom_style %}
 
 {% endblock %}

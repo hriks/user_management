@@ -1,13 +1,32 @@
 {% extends 'layouts/form.html' %}
 {% block title %}Login{% endblock %}
 {% block content %}
+{% block custom_style %}
+    <style type="text/css">
+      .center {
+    margin: auto;
+    margin-top: 100px;
+    width: 60%;
+    height: 60%;
+    border: 1px solid #73AD21;
+    padding: 10px;
+}
+    </style>
 
   <form method="post" class="form">
-    <h3 class="form-heading">Login <a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h3>
+
+    <h2 class="form-heading">Login <a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h2>
     <p style="text-align: center; color: red">{% if error %}
-Error:{{ error }} {% endif %}</p>
+<b>{{ error }}</b> {% endif %}</p>
+<div class="center">
+<b>
+UserName:
     {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
+Password:
     {{ form.password(class_ = 'form-control last-input', placeholder = form.password.label.text, required = true) }}
+</b>
     <input type="submit" value="Login" class="btn btn-primary btn-lg btn-block" />
+</div>
   </form>
+  {% endblock custom_style %}
 {% endblock %}
