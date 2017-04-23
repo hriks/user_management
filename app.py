@@ -101,6 +101,7 @@ def login():
             if not blocked:
                 session['name'] = username
                 session['role'] = role
+                session['editid'] = None
                 messages = models.message_show()
                 return render_template('pages/placeholder.home.html',
                                        session=session, messages=messages)
@@ -196,6 +197,8 @@ def update():
             session['editid'] = None
             return redirect(url_for('users'))
     return render_template('forms/update.html', form=form, userid=userid)
+
+
 # Error handlers.
 
 

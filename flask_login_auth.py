@@ -16,8 +16,8 @@ def get_connection():
             host='stampy.db.elephantsql.com',
             port=5432)
         return conn
-    except Exception as e:
-        return e
+    except Exception as error:
+        return error
 
 # for authenticating ---------------------------------------------------
 # Try except block is used for passing errors
@@ -58,19 +58,20 @@ def role_authenticate(username, password):
 # Search Box --------------------------------------------------------------
 
 
-# def searchbox(name):
-#     try:
-#         connection = get_connection()
-#         cursor = connection.cursor()
-#         query = """SELECT * from "public"."projects" where name='%s'"""
-#         query = query % (name)
-#         cursor.execute(query)
-#         rows = cursor.fetchall()
-#         print rows
-#         connection.close()
-#         return rows
-#     except Exception as e:
-#         raise e
+def searchbox(userid):
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+        query = """SELECT * from "public"."user_rec" where userid='%s'"""
+        query = query % (userid)
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        print rows
+        connection.close()
+        return rows
+    except Exception as error:
+        return error
+
 
 def blocked(username, password):
     connection = get_connection()

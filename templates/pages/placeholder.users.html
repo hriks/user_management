@@ -17,7 +17,7 @@
     <td><font color="#000000" size="3"><strong>Name</strong></font></td>
     <td><font color="#000000" size="3"><strong>Email</strong></font></td>
 
-    {% if session['role'] == 'admin' or 'manager'%}
+    {% if (session['role'] == 'admin') or (session['role'] == 'manager') %}
 
     <td><font color="#000000" size="3"><strong>Update</strong></font></td>
     <td><font color="#000000" size="3"><strong>Blocked</strong></font></td>
@@ -33,7 +33,7 @@
     <td><b><font color="#000000" size="2">{{user[1]}}</font></b></td>
     <td><b><font color="#000000" size="2">{{user[2]}}</font></b></td>
 
-    {% if session['role'] == 'admin' or 'manager' %}
+    {% if (session['role'] == 'admin') or (session['role'] == 'manager') %}
 
     <td>
     	<font color="#000000" size="1">
@@ -88,11 +88,11 @@
     </table>
 
 </p>
-
+{% if session['role'] == 'admin' %}
 <p class="lead">
 	<a href="{{ url_for('users') }}">
 		Create a new user
 	</a>
 </p>
-
+{% endif %}
 {% endblock %}
