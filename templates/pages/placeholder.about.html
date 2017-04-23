@@ -20,7 +20,7 @@ h. View All users [User, Manager, Admin]</p></br>
 
 {% if session['role'] == 'admin' %}
 <p class="lead">
-	<a href="{{ url_for('users') }}">
+	<a href="{{ url_for('register') }}">
 		Create a new user
 	</a>
 </p>
