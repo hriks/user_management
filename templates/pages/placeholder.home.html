@@ -1,0 +1,45 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>KickStarter</h1>
+</div>{% if session['usersid']%}
+<h1>PROJECTS </h1> 
+
+<div><form action="showPledge" method= POST >
+	<table border="1px" style="border-style:outset; border-width:1px; padding-left:4px; padding-right:4px; padding-top:7px; padding-bottom:7px" width="921" cell>
+    <thead>
+    <tr style="border-style:outset; border-width:1px; font-size: 24px;" >
+    <th>User ID</th>
+    <th>Project Id</th>
+    <th>Project Name</th>
+    <th>Short Description</th>
+    <th>Long Description</th>
+    <th>Pledge Amount</th>
+    <th>Pledge</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for n in session['project'] %}
+ 		<tr style="font-size: 20px;">
+        <td><strong>{{n[1]}}</strong></td> 
+ 			<td><strong>{{n[0]}}</strong></td> 
+    		<td><strong>{{n[2]}}</strong></td> 
+    		<td>{{n[3]}}</td>
+    		<td>{{n[4]}}</td>
+    		<td>{{n[5]}}</td>   
+    		<td><a><button name="submit" value="{{ n[0] }}" type="submit" style="width: 100%">Pledge</button></a></td>
+    	
+ 		</tr>	
+{% endfor %}
+</tbody>
+    </table>
+    </form>
+
+
+
+{% else %}
+<p class="lead">Login and Create a Project, Share your idea and get <code>PLEDGE</code> with <code>KICKSTARTER</code> </p>
+{% endif %}
+{% endblock %}
