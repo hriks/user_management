@@ -40,7 +40,8 @@
                 </button>
             </form>
         </font>
-{% if user[4] %}
+    {% if user[3] %}
+
         <b>
             <font color="white" size="1">
                 <form action="block" method= POST>
@@ -51,7 +52,7 @@
                 </form>
             </font>
         </b>
-{% else %}
+    {% else %}
         <b>
             <font color="white" size="1">
                 <form action="block" method= POST >
@@ -63,14 +64,14 @@
             </font>
         </b>
 
-{% endif %}
+    {% endif %}
 {% elif user[3] %}
 
         <button name="submit" type="submit" style="width: 100%; background-color: red;">
             Account is Blocked
         </button>
 {% else %}
-        <button name="submit" type="submit" style="width: 100%; background-color: green;color: white">
+        <button name="submit" type="submit" style="width: 100%; background-color: green;color: white    ">
             Account is Active
         </button>
 {% endif %}
