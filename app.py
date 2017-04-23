@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for,\
     session, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from logging import Formatter, FileHandler
-from models import User, Projects, Pledges
+import models
 from functools import wraps
 import flask_login_auth
 from forms import *
@@ -90,11 +90,7 @@ def login():
         password = form.password.data
         value = flask_login_auth.authenticate(username, password)
         if (value == 1):
-            get_data = flask_login_auth.get_data(username, password)
             session['name'] = username
-            session['usersid'] = get_data[0][0]
-            project = flask_login_auth.show_project(session['usersid'])
-            session['project'] = project
             return render_template('pages/placeholder.home.html',
                                    session=session)
         else:
@@ -137,9 +133,9 @@ def index():
     return render_template('pages/placeholder.home.html', session=session)
 
 
-@app.route('/showPledge', methods=['GET', 'POST'])
+@app.route('/messages', methods=['GET', 'POST'])
 @login_requied
-def showPledge():
+def messages():
     if request.method == 'POST':
         projectId = request.form['submit']
         session['projectId'] = projectId

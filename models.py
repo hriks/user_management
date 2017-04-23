@@ -61,7 +61,8 @@ def create_user(USER, NAME, ROLE, EMAIL, PASSWORD):
     connection.close()
 
 
-def user_alreadyexits(USER, NAME, EMAIL, PASSWORDV):
+def user_alreadyexits(USER, NAME, ROLE, EMAIL, PASSWORD):
+    BLOCK = False
     connection = get_connection()
     cursor = connection.cursor()
     query = """SELECT USERID from  where USERID='%s';"""
@@ -71,27 +72,9 @@ def user_alreadyexits(USER, NAME, EMAIL, PASSWORDV):
     print rows
     try:
         if (len(rows) == 0):
-            create_user(USER, NAME, EMAIL, PASSWORDV)
+            create_user(USER, NAME, ROLE, BLOCK, EMAIL, PASSWORD)
         else:
             return 1
-    except Exception as error:
-        return error
-    connection.close()
-
-
-def authenticate(username, password):
-    connection = get_connection()
-    cursor = connection.cursor()
-    query = """SELECT USERID, PASSWORD from LOGS where USERID='%s' and PASSWORD='%s';"""
-    query = query % (username, password)
-    cursor.execute(query)
-    rows = cursor.fetchall()
-    print rows
-    try:
-        if (rows[0][0] == username) and (rows[0][1] == password):
-            return 1
-        else:
-            return 0
     except Exception as error:
         return error
     connection.close()
