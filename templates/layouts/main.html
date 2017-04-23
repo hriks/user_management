@@ -48,9 +48,9 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">User Management</a>
+          <a class="navbar-brand" href="/"><b>User Management</b></a>
         </div>
-        <div class="collapse navbar-collapse">
+        <div class="collapse navbar-collapse" >
           <ul class="nav navbar-nav">
             <li {% if request.endpoint == 'home' %} class="active" {% endif %}><a href="{{ url_for('home') }}">Home</a></li>
             <li {% if request.endpoint == 'about' %} class="active" {% endif %}><a href="{{ url_for('about') }}">About</a></li>
@@ -68,7 +68,7 @@
 
 
           <li> <a>
-            Hi {{ session['name'] }}!
+            <b><i>Hi {{ session['name'] }}!</i></b>
             </a></li>
 
           <li><a href="{{ url_for('logout') }}">Logout</a></li> 
@@ -101,7 +101,7 @@
 
   </div>
 
-  <div id="footer">
+  <div id="footer" style="background-color: brown; color: white">
     <div class="container">
       <p>AndroZDi &copy; All Rights Reserved.</p>
       {% block footer %}{% endblock %}
