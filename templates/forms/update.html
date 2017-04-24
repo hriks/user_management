@@ -23,15 +23,18 @@ Update
     Update profile for User : <b>{{ userid }}</b>
     <div class="center">
     <input name = userid type="hidden" value="{{ userid }}">
-    <b>
-Role:
-    {{ form.role(class_ = 'form-control first-input', placeholder = form.role.label.text, required = true, autofocus = False) }}
-Full Name:
-    {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
-Email:
-    {{ form.email(class_ = 'form-control', placeholder = form.email.label.text, required = true) }}
+    <b>{% for info in get_info %}
+Role: {{ info[3] }}
+    {{ form.role(class_ = 'form-control first-input', placeholder = form.role.label.text, required = false, autofocus = False) }}
+
+Full Name: {{ info[1] }}
+    {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, autofocus = true) }}
+Email: {{ info[2] }}
+    {{ form.email(class_ = 'form-control', placeholder = form.email.label.text) }}
 password:
-    {{ form.password(class_ = 'form-control', placeholder = form.password.label.text, required = true) }}
+    {{ form.password(class_ = 'form-control', placeholder = form.password.label.text) }}
+
+    {% endfor %}
 
     <p class="pull-left"><a href="{{ url_for('users') }}">Users</a></p>
 </b>
