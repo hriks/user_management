@@ -35,6 +35,56 @@
 
 </head>
 <body class="form-only-page">
+<div id="wrap">
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/"><b>User Management</b></a>
+        </div>
+        <div class="collapse navbar-collapse" >
+          <ul class="nav navbar-nav">
+            <li {% if request.endpoint == 'home' %} class="active" {% endif %}><a href="{{ url_for('home') }}">Home</a></li>
+            <li {% if request.endpoint == 'about' %} class="active" {% endif %}><a href="{{ url_for('about') }}">About</a></li>
+            {% if session['name'] %}
+            {% if session['role'] == 'admin' %}
+            <li {% if request.endpoint == 'register' %} class="active" {% endif %}><a href="{{ url_for('register') }}">
+            Create New User
+            </a></li>
+            {% endif %}
+            <li {% if request.endpoint == 'users' %} class="active" {% endif %}><a href="{{ url_for('users') }}">
+            Users </a></li>
+             {% endif %}</a></li>
+
+          </ul>
+          <ul class="nav navbar-nav pull-right">{% if session['name'] %}
+          
+            <li> <a>
+            <form action="search" method="post" class="form">
+            <input type="text" name="search" placeholder="search User..."> <input type="submit" name= "Search" value ="Search" />
+            </form>
+            </a></li>
+
+
+          <li> <a>
+            <b><i>Hi {{ session['name'] }}!</i></b>
+            </a></li>
+
+          <li><a href="{{ url_for('logout') }}">Logout</a></li> 
+             
+          {% else %} 
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+          {% endif %}
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
 
   <div class="container">
 
@@ -66,6 +116,19 @@
     load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
   });
   </script>
-
+  <div>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+  </div>
+<div id="footer" style="background-color: brown; color: white">
+    <div class="container">
+      <p>AndroZDi &copy; All Rights Reserved.</p>
+      {% block footer %}{% endblock %}
+    </div>
+  </div>
 </body>
 </html>
