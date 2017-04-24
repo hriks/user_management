@@ -51,7 +51,7 @@ def process_create_user(USER, NAME, ROLE, EMAIL, PASSWORD):
     cursor = connection.cursor()
     print "cur is created"
     query = """INSERT INTO user_rec(
-    USERID,NAME,ROLE,BLOCK,PASSWORD,EMAIL
+    USERID,NAME,ROLE,BLOCK,EMAIL,PASSWORD
     ) VALUES('%s', '%s', '%s', '%s', '%s', '%s');"""
     query = query % (
         USER, NAME, ROLE, BLOCK, EMAIL, PASSWORD)
@@ -131,8 +131,38 @@ def block(block, userid):
 def update(role, userid, password, email, name):
     connection = get_connection()
     cursor = connection.cursor()
-    query = """UPDATE user_rec SET role = '%s', name = '%s', password = '%s', email = '%s' WHERE userid = '%s';""" # noqa
-    query = query % (role, name, password, email, userid)
+    if role and userid and password and email and name:
+        query = """UPDATE user_rec SET role = '%s', name = '%s', password = '%s', email = '%s' WHERE userid = '%s';""" # noqa
+        query = query % (role, name, password, email, userid)
+    elif userid and role:
+        query = """UPDATE user_rec SET role = '%s' WHERE userid = '%s';""" # noqa
+        query = query % (role, userid)
+    elif userid and password:
+        query = """UPDATE user_rec SET password = '%s' WHERE userid = '%s';""" # noqa
+        query = query % (password, userid)
+    elif userid and email:
+        query = """UPDATE user_rec SET email = '%s' WHERE userid = '%s';""" # noqa
+        query = query % (email, userid)
+    elif userid and name:
+        query = """UPDATE user_rec SET role = '%s', name = '%s' WHERE userid = '%s';""" # noqa
+        query = query % (name, userid)
+    elif userid and role and password:
+        query = """UPDATE user_rec SET role = '%s', password = '%s' WHERE userid = '%s';""" # noqa
+        query = query % (role, password, userid)
+    elif userid and role and email:
+        query = """UPDATE user_rec SET role = '%s', email = '%s' WHERE userid = '%s';""" # noqa
+        query = query % (role, email, userid)
+    elif userid and role and name:
+        query = """UPDATE user_rec SET role = '%s', name = '%s' WHERE userid = '%s';""" # noqa
+        query = query % (role, name, userid)
+    elif role and userid and password and email:
+        query = """UPDATE user_rec SET role = '%s', password = '%s', email = '%s' WHERE userid = '%s';""" # noqa
+        query = query % (role, password, email, userid)
+    elif role and userid and password and name:
+        query = """UPDATE user_rec SET role = '%s', name = '%s', password = '%s' WHERE userid = '%s';""" # noqa
+        query = query % (role, name, password, userid)
+    else:
+        return 0
     print query
     try:
         cursor.execute(query)
@@ -141,3 +171,15 @@ def update(role, userid, password, email, name):
         return 1
     except Exception as error:
         raise error
+
+
+def get_info(userid):
+    connection = get_connection()
+    cursor = connection.cursor()
+    query = """SELECT userid, name, email, role, block from user_rec where userid = '%s';"""  # noqa
+    query = query % userid
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    print rows, len(rows)
+    return rows
+    connection.close()

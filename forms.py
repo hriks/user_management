@@ -27,12 +27,6 @@ class RegisterForm(Form):
         'Password', validators=[DataRequired(), Length(min=2, max=40)]
     )
 
-    confirm = PasswordField(
-        'Repeat Password',
-        [DataRequired(),
-         EqualTo('password', message='Passwords must match')]
-    )
-
 
 class LoginForm(Form):
     name = TextField('Username', [DataRequired()])
@@ -51,23 +45,17 @@ class UpdateForm(Form):
             ('user', 'User')])
 
     userid = TextField(
-        'Username', validators=[DataRequired(), Length(min=2, max=25)]
+        'New Username', validators=[DataRequired(), Length(min=2, max=25)]
     )
 
     name = TextField(
-        'Name', validators=[DataRequired(), Length(min=6, max=25)]
+        'New Name', validators=[Length(min=6, max=25)]
     )
 
     email = TextField(
-        'Email', validators=[DataRequired(), Length(min=6, max=40)]
+        'New Email', validators=[Length(min=6, max=40)]
     )
 
     password = PasswordField(
-        'Password', validators=[DataRequired(), Length(min=2, max=40)]
-    )
-
-    confirm = PasswordField(
-        'Repeat Password',
-        [DataRequired(),
-         EqualTo('password', message='Passwords must match')]
+        'New Password', validators=[Length(min=2, max=40)]
     )
