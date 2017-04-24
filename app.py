@@ -178,6 +178,7 @@ def update():
     else:
         userid = session['name']
     form = UpdateForm(request.form)
+    get_info = models.get_info(userid)
     if request.method == 'POST':
         user = models.update(
             form.role.data, userid, form.password.data,
@@ -185,8 +186,7 @@ def update():
         )
         if user != 1:
             flash(
-                'ERROR! Already on this role OR CHECK YOUR\
-                USERNAME OR ALREADY EXITS'
+                "ERROR! Already on this role, or you hadn't updated anything"
             )
             return redirect(url_for('update'))
         else:
@@ -196,7 +196,9 @@ def update():
             )
             session['editid'] = None
             return redirect(url_for('users'))
-    return render_template('forms/update.html', form=form, userid=userid)
+    return render_template(
+        'forms/update.html', form=form, userid=userid, get_info=get_info
+    )
 
 
 # Error handlers.
