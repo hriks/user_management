@@ -16,4 +16,3 @@ pycrypto==2.6.1
 wsgiref==0.1.2
 psycopg2==2.6.2
 Flask-Login==0.4.0
-
