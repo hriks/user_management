@@ -4,7 +4,10 @@
 
 <div class="page-header">
     <h2>User-Management System</h2>
-</div>{% if session['role'] %}
+</div>
+{% if session['role'] %}
+
+{% if session['role'] == 'user' %}
 <div class="page-header">
     <form action = "message" id="message" method = post>
         <input id =message name="message" type = "text" placeholder = "Post your update here" style="height: 70px; width: 700px">
@@ -12,6 +15,7 @@
         <input name ="Post update" type="submit" />
     </form>
 </div>
+{% endif %}
 <div class="page-header">
     <h2> Latest Update </h2>
 
