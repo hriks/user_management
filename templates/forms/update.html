@@ -24,9 +24,10 @@ Update
     <div class="center">
     <input name = userid type="hidden" value="{{ userid }}">
     <b>{% for info in get_info %}
+{% if (session['role'] == 'admin') or (session['role'] == 'manager') %}
 Role: {{ info[3] }}
     {{ form.role(class_ = 'form-control first-input', placeholder = form.role.label.text, required = false, autofocus = False) }}
-
+{% endif %}
 Full Name: {{ info[1] }}
     {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, autofocus = true) }}
 Email: {{ info[2] }}
