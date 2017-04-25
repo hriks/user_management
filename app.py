@@ -65,8 +65,8 @@ def register():
         )
         if user == 1:
             flash(
-                'ERROR! PLEASE ENTER SOMETHING OR CHECK YOUR\
-                USER EXITS OR ALREADY EXITS'
+                'ERROR! Please enter something or check yours\
+                username or user already exists'
             )
             return redirect(url_for('register'))
         else:
