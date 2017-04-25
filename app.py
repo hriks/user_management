@@ -54,6 +54,7 @@ def auth_requied(f):
 
 
 @app.route('/register', methods=['GET', 'POST'])
+@login_requied
 @auth_requied
 def register():
     form = RegisterForm(request.form)
@@ -85,6 +86,7 @@ def about():
 
 
 @app.route('/users')
+@login_requied
 def users():
     users = models.users()
     return render_template('pages/placeholder.users.html', users=users)
