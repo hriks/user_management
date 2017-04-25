@@ -38,11 +38,23 @@ def logout_requied(f):
             return f(*args, **kwargs)
     return wrap
 
+
+def auth_requied(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if session['role'] == 'admin':
+            return f(*args, **kwargs)
+        else:
+            flash(
+                ' Sorry! You dont have any permission to perform such action')
+            return redirect(url_for('home'))
+    return wrap
+
 # Controllers.
 
 
 @app.route('/register', methods=['GET', 'POST'])
-@login_requied
+@auth_requied
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST':
