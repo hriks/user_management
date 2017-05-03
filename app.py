@@ -99,7 +99,6 @@ def logout():
     return redirect(url_for('home'))
 
 
-@app.route('/login', methods=['GET', 'POST'])
 @logout_requied
 def login():
     error = None
