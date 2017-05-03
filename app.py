@@ -99,6 +99,7 @@ def logout():
     return redirect(url_for('home'))
 
 
+@app.route('/login', methods=['GET', 'POST'])
 @logout_requied
 def login():
     error = None
@@ -242,4 +243,4 @@ if not app.debug:
 
 # Default port:
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
