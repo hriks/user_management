@@ -113,7 +113,7 @@
       <p>AndroZDi &copy; All Rights Reserved. </p>
       {% if session['name'] %}
           <p>
-            Login count: {{ count }}
+            Login count: {{ session['count'] }}
           </p>
       {% endif %}
       {% block footer %}{% endblock %}
