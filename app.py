@@ -77,7 +77,6 @@ def register():
 @app.route('/', methods=['GET', 'POST'])
 def home():
     messages = models.message_show()
-    print session['count']
     return render_template('pages/placeholder.home.html', messages=messages, session=session) # noqa
 
 
