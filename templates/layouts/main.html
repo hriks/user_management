@@ -110,7 +110,12 @@
 
   <div id="footer" style="background-color: brown; color: white">
     <div class="container">
-      <p>AndroZDi &copy; All Rights Reserved.</p>
+      <p>AndroZDi &copy; All Rights Reserved. </p>
+      {% if session['name'] %}
+          <p>
+            Login count: {{ count }}
+          </p>
+      {% endif %}
       {% block footer %}{% endblock %}
     </div>
   </div>

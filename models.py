@@ -51,8 +51,8 @@ def process_create_user(USER, NAME, ROLE, EMAIL, PASSWORD):
     cursor = connection.cursor()
     print "cur is created"
     query = """INSERT INTO user_rec(
-    USERID,NAME,ROLE,BLOCK,EMAIL,PASSWORD
-    ) VALUES('%s', '%s', '%s', '%s', '%s', '%s');"""
+    USERID,NAME,ROLE,BLOCK,EMAIL,PASSWORD,COUNT
+    ) VALUES('%s', '%s', '%s', '%s', '%s', '%s', 0);"""
     query = query % (
         USER, NAME, ROLE, BLOCK, EMAIL, PASSWORD)
     print query
@@ -183,3 +183,26 @@ def get_info(userid):
     print rows, len(rows)
     return rows
     connection.close()
+
+
+def count_show(userid):
+    connection = get_connection()
+    cursor = connection.cursor()
+    query = """SELECT count from user_rec where userid = '%s';"""
+    query = query % userid
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    print 'hi', rows[0][0], len(rows)
+    return rows
+    connection.close()
+
+
+def count_add(userid, count):
+    connection = get_connection()
+    cursor = connection.cursor()
+    query = """UPDATE user_rec SET count = '%s' WHERE userid = '%s';"""
+    query = query % (count, userid)
+    cursor.execute(query)
+    connection.commit()
+    connection.close()
+    return 'done'

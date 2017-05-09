@@ -77,7 +77,8 @@ def register():
 @app.route('/', methods=['GET', 'POST'])
 def home():
     messages = models.message_show()
-    return render_template('pages/placeholder.home.html', messages=messages)
+    print session['count']
+    return render_template('pages/placeholder.home.html', messages=messages, session=session) # noqa
 
 
 @app.route('/about')
@@ -116,9 +117,20 @@ def login():
                 session['name'] = username
                 session['role'] = role
                 session['editid'] = None
+                count = models.count_show(username)
                 messages = models.message_show()
-                return render_template('pages/placeholder.home.html',
-                                       session=session, messages=messages)
+                if count[0][0] == 5:
+                    session['count'] = count[0][0]
+                    return render_template('pages/placeholder.home.html', session=session, messages=messages) # noqa
+                else:
+                    session['count'] = count[0][0] + 1
+                    new_count = session['count']
+                    print 'This is new', new_count
+                new_count = models.count_add(username, new_count)
+                print new_count[0][0]
+                final_count = models.count_show(username)
+                print final_count
+                return render_template('pages/placeholder.home.html', session=session, messages=messages) # noqa
             else:
                 error = 'Your Account is blocked !\
                 Please contact Admin'
