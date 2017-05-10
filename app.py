@@ -118,17 +118,11 @@ def login():
                 session['editid'] = None
                 count = models.count_show(username)
                 messages = models.message_show()
-                if count[0][0] == 5:
-                    session['count'] = count[0][0]
-                    return render_template('pages/placeholder.home.html', session=session, messages=messages) # noqa
-                else:
+                if count[0][0]:
                     session['count'] = count[0][0] + 1
                     new_count = session['count']
-                    print 'This is new', new_count
                 new_count = models.count_add(username, new_count)
-                print new_count[0][0]
-                final_count = models.count_show(username)
-                print final_count
+                models.count_show(username)
                 return render_template('pages/placeholder.home.html', session=session, messages=messages) # noqa
             else:
                 error = 'Your Account is blocked !\
