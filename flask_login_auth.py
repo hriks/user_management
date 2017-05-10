@@ -62,11 +62,10 @@ def searchbox(userid):
     try:
         connection = get_connection()
         cursor = connection.cursor()
-        query = """SELECT * from "public"."user_rec" where userid='%s'"""
-        query = query % (userid)
+        query = """SELECT * FROM "public"."user_rec" WHERE userid LIKE '%s'"""
+        query = query % ('%' + userid + '%')
         cursor.execute(query)
         rows = cursor.fetchall()
-        print rows
         connection.close()
         return rows
     except Exception as error:
