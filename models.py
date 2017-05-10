@@ -34,14 +34,11 @@ def create_db():
 def post_messages(USER, MESSAGES):
     connection = get_connection()
     cursor = connection.cursor()
-    print "cur is created"
     query = """INSERT INTO rec(USERID,MESSAGES) VALUES('%s', '%s');"""
     query = query % (
         USER, MESSAGES)
-    print query
     cursor.execute(query)
     connection.commit()
-    print "Message posted successfully"
     connection.close()
 
 
@@ -49,16 +46,13 @@ def process_create_user(USER, NAME, ROLE, EMAIL, PASSWORD):
     BLOCK = False
     connection = get_connection()
     cursor = connection.cursor()
-    print "cur is created"
     query = """INSERT INTO user_rec(
     USERID,NAME,ROLE,BLOCK,EMAIL,PASSWORD,COUNT
     ) VALUES('%s', '%s', '%s', '%s', '%s', '%s', 0);"""
     query = query % (
         USER, NAME, ROLE, BLOCK, EMAIL, PASSWORD)
-    print query
     cursor.execute(query)
     connection.commit()
-    print "User created successfully"
     connection.close()
 
 
@@ -69,13 +63,10 @@ def create_user(USER, NAME, ROLE, EMAIL, PASSWORD):
     query = query % (USER, )
     cursor.execute(query)
     rows = cursor.fetchall()
-    print len(rows)
     try:
         if len(rows) == 0:
             process_create_user(USER, NAME, ROLE, EMAIL, PASSWORD)
-            print "processed"
         else:
-            print "FAILED"
             return 1
     except Exception as error:
         return error
@@ -88,7 +79,6 @@ def message_show():
     query = """SELECT * from rec;"""
     cursor.execute(query)
     rows = cursor.fetchall()
-    print rows, len(rows)
     return rows
     connection.close()
 
@@ -99,7 +89,6 @@ def users():
     query = """SELECT userid, name, email, role, block from user_rec;"""
     cursor.execute(query)
     rows = cursor.fetchall()
-    print rows, len(rows)
     return rows
     connection.close()
 
@@ -109,7 +98,6 @@ def message_delete(id):
     cursor = connection.cursor()
     query = """DELETE FROM rec WHERE ID = %s;"""
     query = query % id
-    print query
     cursor.execute(query)
     connection.commit()
     connection.close()
@@ -121,7 +109,6 @@ def block(block, userid):
     cursor = connection.cursor()
     query = """UPDATE user_rec SET block = '%s' WHERE userid = '%s';"""
     query = query % (block, userid)
-    print query
     cursor.execute(query)
     connection.commit()
     connection.close()
@@ -163,7 +150,6 @@ def update(role, userid, password, email, name):
         query = query % (role, name, password, userid)
     else:
         return 0
-    print query
     try:
         cursor.execute(query)
         connection.commit()
@@ -180,7 +166,6 @@ def get_info(userid):
     query = query % userid
     cursor.execute(query)
     rows = cursor.fetchall()
-    print rows, len(rows)
     return rows
     connection.close()
 
@@ -192,7 +177,6 @@ def count_show(userid):
     query = query % userid
     cursor.execute(query)
     rows = cursor.fetchall()
-    print 'hi', rows[0][0], len(rows)
     return rows
     connection.close()
 
