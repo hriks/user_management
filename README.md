@@ -37,7 +37,7 @@ the module itself in a very pythonic way.
 ```
 pip install -r requirements.txt
 ```
-##NOTE
+## NOTE
 Postgresql must be installed.
 if not install postgres and its server-side extensions
 
