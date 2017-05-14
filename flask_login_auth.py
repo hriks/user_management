@@ -42,9 +42,10 @@ def authenticate(username, password):
             return error
     except Exception as error:
         return error
+
+
 # -------------------------------------------------------------------------
-
-
+# Role verification -------------------------------------------------------
 def role_authenticate(username, password):
     connection = get_connection()
     cursor = connection.cursor()
@@ -54,10 +55,9 @@ def role_authenticate(username, password):
     rows = cursor.fetchall()
     return rows[0][2]
 
+
 # -------------------------------------------------------------------------
 # Search Box --------------------------------------------------------------
-
-
 def searchbox(userid):
     try:
         connection = get_connection()
@@ -72,6 +72,8 @@ def searchbox(userid):
         return error
 
 
+# -------------------------------------------------------------------------
+# User Blocked ------------------------------------------------------------
 def blocked(username, password):
     connection = get_connection()
     cursor = connection.cursor()

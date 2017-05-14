@@ -222,7 +222,6 @@ def update():
 
 # Error handlers.
 
-
 @app.errorhandler(500)
 def internal_error(error):
     # db_session.rollback()
