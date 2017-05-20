@@ -192,7 +192,7 @@ def edit():
 @app.route('/update', methods=['GET', 'POST'])
 @login_requied
 def update():
-    if session['editid']:
+    if 'editid' in session:
         userid = session['editid']
     else:
         userid = session['name']
