@@ -83,6 +83,30 @@ def register():
     return render('forms/register.html', form=form)
 
 
+# user will be able to register new user as normal
+# user without login with only user role
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    form = RegistrationForm(request.form)
+    if request.method == 'POST':
+        user = models.create_user(
+            form.userid.data,
+            form.name.data,
+            form.role.data,
+            form.email.data,
+            form.password.data
+        )
+        if user == 1:
+            hriks(
+                'ERROR! Please enter something or check yours\
+                username and password or user already exists'
+            )
+            return redirect(url_for('register'))
+        else:
+            return redirect(url_for('home'))
+    return render('forms/register.html', form=form)
+
+
 # Open as you run the server
 @app.route('/', methods=['GET', 'POST'])
 def home():
