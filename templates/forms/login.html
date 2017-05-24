@@ -13,20 +13,35 @@
 }
     </style>
 
-  <form method="post" class="form">
+<div class="w3-card-4">
 
-    <h2 class="form-heading">Login <a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h2>
+  <div class="w3-container w3-teal">
+    <h2 class="form-heading">
+      Login
+      <a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a>
+    </h2>
+  </div>
+
+  <form method="post" class="form w3-container">
     <p style="text-align: center; color: red">{% if error %}
-<b>{{ error }}</b> {% endif %}</p>
-<div class="center">
-<b>
-UserName:
+    <b>{{ error }}</b> {% endif %}</p>
+    <div class="center">
+    <b>
+    <label>Username</label>
     {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
-Password:
+    <label>Password</label>
     {{ form.password(class_ = 'form-control last-input', placeholder = form.password.label.text, required = true) }}
 </b>
     <input type="submit" value="Login" class="btn btn-primary btn-lg btn-block" />
 </div>
   </form>
+  </br></br></br></br></br>
+  <div class="w3-container w3-teal form" id="footer" color: white">
+    <div class="container">
+      <p>AndroZDi &copy; All Rights Reserved.</p>
+      {% block footer %}{% endblock %}
+    </div>
+  </div>
+  </div>
   {% endblock custom_style %}
 {% endblock %}
