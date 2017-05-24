@@ -131,7 +131,7 @@ def block(block, userid):
 
 
 # User's will be able to update the details
-# on database accoding to the details provided by the 
+# on database accoding to the details provided by the
 # user
 def update(role, userid, password, email, name):
     connection = get_connection()
