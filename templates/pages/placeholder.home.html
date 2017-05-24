@@ -1,44 +1,55 @@
 {% extends 'layouts/main.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
-
-<div class="page-header">
-    <h2>User-Management System</h2>
+{% block custom_style %}
+<div class="page-header w3-container">
+    <h2 class="w3-xxlarge" style="font-family: Tangerine, serif">User-Management System</h2>
 </div>
 {% if session['role'] %}
 
-<div class="page-header">
+<div>
     <form action = "message" id="message" method = post>
-        <input id =message name="message" type = "text" placeholder = "Post your update here" style="height: 70px; width: 700px">
-        </br>
-        <input name ="Post update" type="submit" />
+        <input class="w3-input w3-animate-input" id =message name="message" type = "text" placeholder = "Post your update here" style="height: 50px; width: 200px">
+        <input name ="Post update" type="hidden" />
     </form>
 </div>
 <div class="page-header">
-    <h2> Latest Update </h2>
+    <div class="w3-container">
+        <div class="w3-card-4" style="width:100%;">
+            <header class="w3-container w3-teal">
+                <h1>Latest Update</h1>
+            </header>
 
-    <table border="5px" style="border-style:outset; border-width:2px; padding-left:4px; padding-right:4px; padding-top:1px; padding-bottom:1px" bgcolor="#33CCFF" width="921">
-    {% for message in messages %}
-    <tr>
-        <td style="text-align: center;font-size: 10px; background-color : #717D7E" width="150">
-            <font color="white" size="3">
-                <strong>{{message[1]}} </strong>Says
-            </font>
-                {% if session['role'] == 'admin' %}
-                </br>
-                <form action="delete" method= POST >
-                    <button name="submit" value="{{ message[0] }}" type="submit" style="width: 100%">Delete</button>
-                </form>
-                {% endif %}
-        </td>
-        <td style="text-align: left;font-size: 10px; background-color : #E5DDDB">
-            <font color="#000000" size="2">
-                <strong> {{message[2]}}</strong>
-            </font>
-        </td>
-    </tr>
-    {% endfor %}
-    </table>
+            <div class="w3-container">
+                <table width="921" class="w3-table w3-striped w3-panel w3-border w3-round-xlarge">
+                {% for message in messages %}
+                    <tr>
+                        <td style="text-align: center; font-family: Tangerine, serif" width="150">
+                            <font size="5">
+                                <i><strong>{{message[1]}} </strong></i>
+                            </font>
+                        </td>
+                        <td style="text-align: left; padding-left: 20px" width="770">
+                            <font color="#000000" size="2">
+                                <strong> {{message[2]}}</strong>
+                            </font>
+                        </td>
+                        <td>
+                            {% if session['role'] == 'admin' %}
+                            <form action="delete" method= POST >
+                               <button class="w3-btn" name="submit" value="{{ message[0] }}" type="submit" style="width: 20%">
+                               <i class="fa fa-trash">
+                               </i>
+                               </button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
 
     {{ message }}
 </div>
@@ -47,4 +58,5 @@
 {% else %}
 <p class="lead">Post your ideas or message's</p>
 {% endif %}
+{% endblock custom_style %}
 {% endblock %}

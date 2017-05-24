@@ -14,9 +14,18 @@ Add User
     padding: 10px;
 }
     </style>
-  <form method="post" class="form">
 
-    <h3 class="form-heading">Add User <a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h3>
+<div class="w3-card-4">
+
+  <div class="w3-container w3-teal">
+    <h2 class="form-heading">
+      Sign up
+      <a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a>
+    </h2>
+  </div>
+  </br></br>
+
+  <form method="post" class="form">
 
     <div class="center">
 <b>Role:
@@ -31,9 +40,17 @@ Password:
     {{ form.password(class_ = 'form-control', placeholder = form.password.label.text, required = true) }}
 </b>
     <input type="submit" value="Register" class="btn btn-primary btn-lg btn-block"  >
-
+</div>
   </form>
+  </br></br></br>
+  <div class="w3-container w3-teal form" id="footer" color: white">
+    <div class="container">
+      <p>AndroZDi &copy; All Rights Reserved.</p>
+      {% block footer %}{% endblock %}
+    </div>
   </div>
-    {% endblock custom_style %}
+</div>
+
+{% endblock custom_style %}
 
 {% endblock %}
