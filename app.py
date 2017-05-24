@@ -1,5 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for,\
-    session, flash
+from flask import Flask, render_template as render,\
+    request, redirect, url_for,\
+    session as s
+from flask import flash as hriks
 from flask.ext.sqlalchemy import SQLAlchemy
 from logging import Formatter, FileHandler
 import models
@@ -16,13 +18,15 @@ db = SQLAlchemy(app)
 
 
 # Decorator's
+
+
 def login_requied(f):
     @wraps(f)
     def wrap(*args, **kwargs):
-        if 'name' in session:
+        if 'name' in s:
             return f(*args, **kwargs)
         else:
-            flash(' Sorry! You Need to Login to view this page')
+            hriks(' Sorry! You Need to Login to view this page')
             return redirect(url_for('login'))
     return wrap
 
@@ -30,9 +34,11 @@ def login_requied(f):
 def logout_requied(f):
     @wraps(f)
     def wrap(*args, **kwargs):
-        if 'name' in session:
-            flash(
-                ' Sorry! You are logged in Already. Logout to Do your Action')
+        if 'name' in s:
+            hriks(
+                'Sorry! You are already logged in. Logout to perform your\
+                 Action'
+            )
             return redirect(url_for('home'))
         else:
             return f(*args, **kwargs)
@@ -42,17 +48,20 @@ def logout_requied(f):
 def auth_requied(f):
     @wraps(f)
     def wrap(*args, **kwargs):
-        if session['role'] == 'admin':
+        if s['role'] == 'admin':
             return f(*args, **kwargs)
         else:
-            flash(
+            hriks(
                 ' Sorry! You dont have any permission to perform such action')
             return redirect(url_for('home'))
     return wrap
 
+
 # Controllers.
 
 
+# user will be able to register new user when logged in
+# as Admin or manager
 @app.route('/register', methods=['GET', 'POST'])
 @login_requied
 @auth_requied
@@ -64,105 +73,128 @@ def register():
             form.email.data, form.password.data
         )
         if user == 1:
-            flash(
+            hriks(
                 'ERROR! Please enter something or check yours\
-                username or user already exists'
+                username and password or user already exists'
             )
             return redirect(url_for('register'))
         else:
             return redirect(url_for('home'))
-    return render_template('forms/register.html', form=form)
+    return render('forms/register.html', form=form)
 
 
+# Open as you run the server
 @app.route('/', methods=['GET', 'POST'])
 def home():
     messages = models.message_show()
-    return render_template('pages/placeholder.home.html', messages=messages, session=session) # noqa
+    return render('pages/placeholder.home.html', messages=messages, session=s) # noqa
 
 
 @app.route('/about')
 def about():
-    return render_template('pages/placeholder.about.html')
+    return render('pages/placeholder.about.html')
 
 
+# Shows all user
 @app.route('/users')
 @login_requied
 def users():
     users = models.users()
-    return render_template('pages/placeholder.users.html', users=users)
+    return render('pages/placeholder.users.html', users=users)
 
 
+# Logout user
 @app.route('/logout')
 @login_requied
 def logout():
-    session.clear()
+    s.clear()
     return redirect(url_for('home'))
 
 
+# This implifies for login and authentication
+# for user, role, blocked, and also count
+# no if time user is logged in
 @app.route('/login', methods=['GET', 'POST'])
 @logout_requied
 def login():
     error = None
-    session.clear()
+    s.clear()
     form = LoginForm(request.form)
     if request.method == 'POST':
         username = form.name.data
+        print username
         password = form.password.data
+        print password
         value = flask_login_auth.authenticate(username, password)
+        print value
         if (value == 1):
             role = flask_login_auth.role_authenticate(username, password)
             blocked = flask_login_auth.blocked(username, password)
+            # Checks user is blocked
+            # and return value in true or
+            # False
             if not blocked:
-                session['name'] = username
-                session['role'] = role
-                session['editid'] = None
+                s['name'] = username
+                s['role'] = role
+                s['editid'] = None
+                # count will show no of time user logged in
                 count = models.count_show(username)
                 messages = models.message_show()
                 if count[0][0]:
-                    session['count'] = count[0][0] + 1
-                    new_count = session['count']
+                    s['count'] = count[0][0] + 1
+                    new_count = s['count']
                 new_count = models.count_add(username, new_count)
                 models.count_show(username)
-                return render_template('pages/placeholder.home.html', session=session, messages=messages) # noqa
+                return render('pages/placeholder.home.html', session=s, messages=messages) # noqa
             else:
                 error = 'Your Account is blocked !\
                 Please contact Admin'
-                return render_template(
+                return render(
                     'forms/login.html', form=form, error=error)
         else:
             error = 'Invalid username or password \
             Please try again!'
-            return render_template('forms/login.html', form=form, error=error)
-    return render_template('forms/login.html', form=form)
+            return render('forms/login.html', form=form, error=error)
+    return render('forms/login.html', form=form)
 
 
+# client will be able to search by username
 @app.route('/search', methods=['GET', 'POST'])
 @login_requied
 def search():
     search = request.form['search']
     match = flask_login_auth.searchbox(search)
     print match
-    return render_template('pages/placeholder.search.html', search=search,
-                           match=match)
+    return render(
+        'pages/placeholder.search.html', search=search,
+        match=match
+    )
 
 
 @app.route('/index')
 @login_requied
 def index():
-    project = flask_login_auth.show_project(session['usersid'])
-    session['project'] = project
-    return render_template('pages/placeholder.home.html', session=session)
+    if 'userid' in s:
+        project = flask_login_auth.show_project(s['usersid'])
+        s['project'] = project
+        return render('pages/placeholder.home.html', session=s)
+    else:
+        return redirect(url_for('home'))
 
 
+# Post messages on Dashboard
+# This can be done by any user
 @app.route('/message', methods=['GET', 'POST'])
 @login_requied
 def message():
     if request.method == 'POST':
         models.post_messages(
-            session['name'], request.form['message'])
+            s['name'], request.form['message'])
         return redirect(url_for('home'))
 
 
+# Admin will able to delete messages posted
+# on Dashboard
 @app.route('/delete', methods=['GET', 'POST'])
 @login_requied
 def delete():
@@ -172,6 +204,7 @@ def delete():
         return redirect(url_for('home'))
 
 
+# Admin able to block the user ny using this method
 @app.route('/block', methods=['GET', 'POST'])
 @login_requied
 def block():
@@ -185,17 +218,17 @@ def block():
 @login_requied
 def edit():
     if request.method == 'POST':
-        session['editid'] = request.form['submit']
+        s['editid'] = request.form['submit']
         return redirect(url_for('update'))
 
 
 @app.route('/update', methods=['GET', 'POST'])
 @login_requied
 def update():
-    if 'editid' in session:
-        userid = session['editid']
+    if 'editid' in s:
+        userid = s['editid']
     else:
-        userid = session['name']
+        userid = s['name']
     form = UpdateForm(request.form)
     get_info = models.get_info(userid)
     if request.method == 'POST':
@@ -204,19 +237,20 @@ def update():
             form.email.data, form.name.data
         )
         if user != 1:
-            flash(
+            hriks(
                 "ERROR! Already on this role, or you hadn't updated anything"
             )
             return redirect(url_for('update'))
         else:
-            flash(
-                'Successfully Role changed for  %s to %s' % (
+            hriks(
+                'Successfully role changed for  %s to %s' % (
                     userid, form.role.data)
             )
-            session['editid'] = None
+            s['editid'] = None
             return redirect(url_for('users'))
-    return render_template(
-        'forms/update.html', form=form, userid=userid, get_info=get_info
+    return render(
+        'forms/update.html', form=form,
+        userid=userid, get_info=get_info
     )
 
 
@@ -224,13 +258,13 @@ def update():
 
 @app.errorhandler(500)
 def internal_error(error):
-    # db_session.rollback()
-    return render_template('errors/500.html'), 500
+    # db_s.rollback()
+    return render('errors/500.html'), 500
 
 
 @app.errorhandler(404)
 def not_found_error(error):
-    return render_template('errors/404.html'), 404
+    return render('errors/404.html'), 404
 
 
 if not app.debug:
