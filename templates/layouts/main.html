@@ -54,12 +54,16 @@
           <ul class="nav navbar-nav">
             <li {% if request.endpoint == 'home' %} class="active" {% endif %}><a href="{{ url_for('home') }}">Home</a></li>
             <li {% if request.endpoint == 'about' %} class="active" {% endif %}><a href="{{ url_for('about') }}">About</a></li>
-            {% if session['name'] %}
             {% if session['role'] == 'admin' %}
             <li {% if request.endpoint == 'register' %} class="active" {% endif %}><a href="{{ url_for('register') }}">
-            Create New User
+            Add New User
+            </a></li>
+            {% else %}
+            <li {% if request.endpoint == 'registration' %} class="active" {% endif %}><a href="{{ url_for('registration') }}">
+            Signup
             </a></li>
             {% endif %}
+            {% if session['name'] %}
             <li {% if request.endpoint == 'users' %} class="active" {% endif %}><a href="{{ url_for('users') }}">
             Users </a></li>
              {% endif %}</a></li>
