@@ -84,7 +84,7 @@ def register():
 
 
 # user will be able to register new user as normal
-# user without login with only user role
+# user without login with only user role_authenticate
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     form = RegistrationForm(request.form)
@@ -238,6 +238,7 @@ def block():
         return redirect(url_for('users'))
 
 
+# Able to edit own profile details
 @app.route('/edit', methods=['GET', 'POST'])
 @login_requied
 def edit():
@@ -246,6 +247,9 @@ def edit():
         return redirect(url_for('update'))
 
 
+# Able to edit user details
+# this can be done only by user having
+# role as 'Admin'
 @app.route('/update', methods=['GET', 'POST'])
 @login_requied
 def update():

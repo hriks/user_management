@@ -1,6 +1,7 @@
 import psycopg2 as pg
 
 
+# Makes the connection to database
 def get_connection():
     try:
         conn = pg.connect(
@@ -14,6 +15,8 @@ def get_connection():
         raise e
 
 
+# Special API fo creationg model to a
+# new database
 def create_db():
     try:
         connection = get_connection()
@@ -31,6 +34,8 @@ def create_db():
         return error
 
 
+# Query for insert messages post by user
+# into database
 def post_messages(USER, MESSAGES):
     connection = get_connection()
     cursor = connection.cursor()
@@ -42,6 +47,8 @@ def post_messages(USER, MESSAGES):
     connection.close()
 
 
+# Query to enter user details into
+# database
 def process_create_user(USER, NAME, ROLE, EMAIL, PASSWORD):
     BLOCK = False
     connection = get_connection()
@@ -56,6 +63,7 @@ def process_create_user(USER, NAME, ROLE, EMAIL, PASSWORD):
     connection.close()
 
 
+# Query to check user aleady exists
 def create_user(USER, NAME, ROLE, EMAIL, PASSWORD):
     connection = get_connection()
     cursor = connection.cursor()
@@ -73,6 +81,7 @@ def create_user(USER, NAME, ROLE, EMAIL, PASSWORD):
     connection.close()
 
 
+# Quey to show messages on dashboard
 def message_show():
     connection = get_connection()
     cursor = connection.cursor()
@@ -83,6 +92,7 @@ def message_show():
     connection.close()
 
 
+# Query to show user details to dashboard
 def users():
     connection = get_connection()
     cursor = connection.cursor()
@@ -93,6 +103,8 @@ def users():
     connection.close()
 
 
+# Query to delete messages posted by user's
+# from database
 def message_delete(id):
     connection = get_connection()
     cursor = connection.cursor()
@@ -104,6 +116,9 @@ def message_delete(id):
     return "Deleted"
 
 
+# query to block user
+# User's wont be able to login
+# if block is True in the database
 def block(block, userid):
     connection = get_connection()
     cursor = connection.cursor()
@@ -115,6 +130,9 @@ def block(block, userid):
     return "DONE"
 
 
+# User's will be able to update the details
+# on database accoding to the details provided by the 
+# user
 def update(role, userid, password, email, name):
     connection = get_connection()
     cursor = connection.cursor()
@@ -159,6 +177,8 @@ def update(role, userid, password, email, name):
         raise error
 
 
+# Query to get user details according to the
+# user
 def get_info(userid):
     connection = get_connection()
     cursor = connection.cursor()
@@ -170,6 +190,7 @@ def get_info(userid):
     connection.close()
 
 
+# Query to show record no of time user login
 def count_show(userid):
     connection = get_connection()
     cursor = connection.cursor()
@@ -181,6 +202,8 @@ def count_show(userid):
     connection.close()
 
 
+# Query to add counts i.e, no of time
+# user loggedin
 def count_add(userid, count):
     connection = get_connection()
     cursor = connection.cursor()
