@@ -34,16 +34,16 @@
                                 <strong> {{message[2]}}</strong>
                             </font>
                         </td>
+                        {% if session['role'] == 'admin' %}
                         <td>
-                            {% if session['role'] == 'admin' %}
                             <form action="delete" method= POST >
-                               <button class="w3-btn" name="submit" value="{{ message[0] }}" type="submit" style="width: 20%">
+                               <button class="w3-btn" name="submit" value="{{ message[0] }}" type="submit" style="width: 30%">
                                <i class="fa fa-trash">
                                </i>
                                </button>
                             </form>
-                            {% endif %}
                         </td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </table>
