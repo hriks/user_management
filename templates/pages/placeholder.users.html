@@ -1,82 +1,84 @@
 {% extends 'layouts/main.html' %}
 {% block title %}Users{% endblock %}
 {% block content %}
+{% block custom_style %}
+<style>
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+}
 
-<div class="page-header">
-  <h1>User Management System</h1>
+th, td {
+    border: none;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+</style>
+
+
+
+<div class="page-header w3-container">
+    <h2 class="w3-xxlarge" style="font-family: Tangerine, serif">User-Management System</h2>
 </div>
 
 <p class="lead"> Users </p>
 
 <p>
 <a href="{{ url_for('update') }}">Edit profile</a>
-<table border="5px" style="border-style:outset; border-width:2px; padding-left:4px; padding-right:4px; padding-top:1px; padding-bottom:1px" bgcolor="#33CCFF" width="921">
-    <tr style="text-align: center;font-size: 14px; background-color : #717D7E">
-    <td><font color="#000000" size="3"><strong>Role</strong></font></td>
-    <td><font color="#000000" size="3"><strong>User ID</strong></font></td>
-    <td><font color="#000000" size="3"><strong>Name</strong></font></td>
-    <td><font color="#000000" size="3"><strong>Email</strong></font></td>
+<table>
+    <tr>
+    <td><font size="3"><strong>Role</strong></font></td>
+    <td><font size="3"><strong>User ID</strong></font></td>
+    <td><font size="3"><strong>Name</strong></font></td>
+    <td><font size="3"><strong>Email</strong></font></td>
 
     {% if (session['role'] == 'admin') or (session['role'] == 'manager') %}
 
-    <td><font color="#000000" size="3"><strong>Update</strong></font></td>
-    <td><font color="#000000" size="3"><strong>Blocked</strong></font></td>
+    <td></td>
+    <td></td>
 
     {% endif %}
 
     </tr>
-    <font color="#000000">{% for user in users %}  
-    </font>  
-    <tr style="text-align: center;font-size: 10px;background-color : #E5DDDB;"><font color="#000000">
-    <td><b><font color="#000000" size="2">{{user[3]}}</font></b></td>
-    <td><b><font color="#000000" size="2">{{user[0]}}</font></b></td>
-    <td><b><font color="#000000" size="2">{{user[1]}}</font></b></td>
-    <td><b><font color="#000000" size="2">{{user[2]}}</font></b></td>
-
+    {% for user in users %}  
+    <tr>
+    <td>{{user[3]}}</td>
+    <td>{{user[0]}}</td>
+    <td>{{user[1]}}</td>
+    <td>{{user[2]}}</td>
     {% if (session['role'] == 'admin') or (session['role'] == 'manager') %}
-
     <td>
-    	<font color="#000000" size="1">
-    		<form action="edit" method= POST>
-	            <button name="submit" value="{{ user[0] }}" type="submit" style="width: 100%">
-	                Edit
-	            </button>
-            </form>
-    	</font>
+        <form action="edit" method= POST>
+            <button class="w3-btn" name="submit" value="{{ user[0] }}" type="submit">
+                <i class="material-icons">mode_edit</i>
+            </button>
+        </form>
     </td>
-
-    {% if user[4] %}
-
     <td>
-    	<b>
-    		<font color="white" size="1">
-    			<form action="block" method= POST>
-    		        <input name = userid type="hidden" value="{{ user[0] }}">
-	            	<button name="submit" value="False" type="submit" style="width: 100%; background-color: green">
-	                	Unblock
-	                </button>
-                </form>
-    		</font>
-    	</b>
-    </td>
+        {% if user[4] %}
+
+        <form action="block" method= POST>
+            <input name = userid type="hidden" value="{{ user[0] }}">
+            <button class="w3-btn" name="submit" value="False" type="submit">
+                <i class="fa fa-user-times" style="color:red"></i>
+            </button>
+        </form>
 
     {% else %}
 
-    <td>
-    	<b>
-    		<font color="white" size="1">
-                <form action="block" method= POST >
-                	<input name = userid type="hidden" value="{{ user[0] }}">
-	                <button name="submit" value="True" type="submit" style="width: 100%; background-color: red;">
-	                Block
-	                </button>
-                </form>
-    		</font>
-    	</b>
-    </td>
+        <form action="block" method= POST >
+            <input name = userid type="hidden" value="{{ user[0] }}">
+            <button class="w3-btn" name="submit" value="True" type="submit">
+                <i class="fa fa-user-plus" style="color:green"></i>
+            </button>
+            </form>
 
     {% endif %}
-
+    </td>
 
 
     {% endif %}
@@ -95,4 +97,5 @@
 	</a>
 </p>
 {% endif %}
+{% endblock custom_style %}
 {% endblock %}
