@@ -2,7 +2,6 @@ from flask import Flask, render_template as render,\
     request, redirect, url_for,\
     session as s
 from flask import flash as hriks
-from flask.ext.sqlalchemy import SQLAlchemy
 from logging import Formatter, FileHandler
 import models
 from functools import wraps
@@ -14,7 +13,6 @@ import logging
 app = Flask(__name__)
 app.secret_key = 'F12Zr47j\3yX R~X@H!jmM]Lwf/,?KT'
 app.config.from_object('config')
-db = SQLAlchemy(app)
 
 
 # Decorator's
@@ -163,10 +161,13 @@ def login():
                 s['editid'] = None
                 # count will show no of time user logged in
                 count = models.count_show(username)
+                print count[0][0]
                 messages = models.message_show()
                 if count[0][0]:
                     s['count'] = count[0][0] + 1
                     new_count = s['count']
+                else:
+                	new_count = 0
                 new_count = models.count_add(username, new_count)
                 models.count_show(username)
                 return render('pages/placeholder.home.html', session=s, messages=messages) # noqa
