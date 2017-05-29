@@ -108,7 +108,15 @@ def registration():
 # Open as you run the server
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    messages = models.message_show()
+    if 'trigger_cache' in s:
+        messages = models.message_show()
+        s['messages'] = messages
+        s.pop('trigger_cache', None)
+    elif 'messages' in s:
+        messages = s['messages']
+    else:
+        messages = models.message_show()
+        s['messages'] = messages
     return render('pages/placeholder.home.html', messages=messages, session=s) # noqa
 
 
@@ -167,7 +175,7 @@ def login():
                     s['count'] = count[0][0] + 1
                     new_count = s['count']
                 else:
-                	new_count = 0
+                    new_count = 0
                 new_count = models.count_add(username, new_count)
                 models.count_show(username)
                 return render('pages/placeholder.home.html', session=s, messages=messages) # noqa
@@ -196,17 +204,6 @@ def search():
     )
 
 
-@app.route('/index')
-@login_requied
-def index():
-    if 'userid' in s:
-        project = flask_login_auth.show_project(s['usersid'])
-        s['project'] = project
-        return render('pages/placeholder.home.html', session=s)
-    else:
-        return redirect(url_for('home'))
-
-
 # Post messages on Dashboard
 # This can be done by any user
 @app.route('/message', methods=['GET', 'POST'])
@@ -215,6 +212,7 @@ def message():
     if request.method == 'POST':
         models.post_messages(
             s['name'], request.form['message'])
+        s['trigger_cache'] = 'post'
         return redirect(url_for('home'))
 
 
@@ -226,6 +224,7 @@ def delete():
     if request.method == 'POST':
         models.message_delete(
             request.form['submit'])
+        s['trigger_cache'] = 'post'
         return redirect(url_for('home'))
 
 
