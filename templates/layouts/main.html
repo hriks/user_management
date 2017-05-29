@@ -64,7 +64,7 @@
             <li {% if request.endpoint == 'register' %} class="active" {% endif %}><a href="{{ url_for('register') }}">
             Add New User
             </a></li> 
-            {% else %}
+            {% elif not session['name'] %}
             <li {% if request.endpoint == 'registration' %} class="active" {% endif %}><a href="{{ url_for('registration') }}">
             Signup
             </a></li>

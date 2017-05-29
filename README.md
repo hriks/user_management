@@ -39,7 +39,7 @@ pip install -r requirements.txt
 ```
 ## NOTE
 Postgresql must be installed.
-if not install postgres and its server-side extensions
+if not, install postgres and its server-side extensions
 
 Run app by 
 ```
