@@ -1,5 +1,5 @@
-user_management 
-===============
+USER MANAGEMENT SYSTEM
+=======================
 
 
 ## Setting up development environment
