@@ -7,4 +7,4 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 DEBUG = True
 
 # Secret key for session management. You can generate random strings here:
-SECRET_KEY = 'my precious'
+SECRET_KEY = os.environ.get("SECRET_KEY")
